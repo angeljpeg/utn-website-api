@@ -6,7 +6,7 @@ import { Programa } from '@/programa/entities/programa.entity';
 import {
   Column,
   Entity,
-  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -57,6 +57,8 @@ export class Carrera {
   @OneToMany(() => CampoDeAccion, (campo) => campo.carrera)
   camposDeAccion?: CampoDeAccion[];
 
-  @ManyToMany(() => Programa, (programa) => programa.carreras)
-  programas?: Programa[];
+  @ManyToOne(() => Programa, (programa) => programa.carreras, {
+    nullable: false,
+  })
+  programa: Programa;
 }

@@ -1,5 +1,5 @@
 import { Carrera } from '@/carrera/entities/carrera.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('programas')
 export class Programa {
@@ -12,6 +12,6 @@ export class Programa {
   @Column({ type: 'varchar', length: 25 })
   icon: string;
 
-  @ManyToMany(() => Carrera, (carrera) => carrera.programas)
+  @OneToMany(() => Carrera, (carrera) => carrera.programa)
   carreras: Carrera[];
 }
