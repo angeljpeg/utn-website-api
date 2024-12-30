@@ -38,10 +38,3 @@ $ pnpm run test:cov
 
 - Author - [angeljpeg](https://github.com/angeljpeg)
 - Website - [UTN](https://nestjs.com/)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-=======
-# utn-website-api
->>>>>>> 48bb9e0188e8317c2ff8687ba10485cbaf8b2ac5
