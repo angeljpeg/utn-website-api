@@ -9,7 +9,7 @@ export class CreateCarreraDto {
   slug: string;
 
   @IsString()
-  type: typeof carreraTypes;
+  type: (typeof carreraTypes)[keyof typeof carreraTypes];
 
   @IsString()
   @IsOptional()

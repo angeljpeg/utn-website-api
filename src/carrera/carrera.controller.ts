@@ -30,7 +30,7 @@ export class CarreraController {
     return this.carreraService.traerCarreraPorId(+id);
   }
 
-  @Get(':slug')
+  @Get('slug/:slug')
   traerCarreraPorSlug(@Param('slug') slug: string) {
     return this.carreraService.traerCarreraPorSlug(slug);
   }

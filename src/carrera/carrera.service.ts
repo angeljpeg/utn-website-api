@@ -5,7 +5,18 @@ import { Carrera } from './entities/carrera.entity';
 
 @Injectable()
 export class CarreraService {
-  private carreras: Carrera[] = [];
+  private carreras: Carrera[] = [
+    {
+      carrera_id: 1,
+      titulo: 'Ingienieria en Sistemas',
+      slug: 'ing-sistemas',
+      type: 'ing',
+      area: 'Tecnologia',
+      competencias: ['Desarrollo de software', 'Gestion de proyectos'],
+      pdf: 'pdf',
+      banner: 'banner',
+    },
+  ];
 
   async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<Carrera> {
     const carrera = {
