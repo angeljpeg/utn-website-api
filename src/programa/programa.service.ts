@@ -5,7 +5,7 @@ import { Programa } from './entities/programa.entity';
 
 @Injectable()
 export class ProgramaService {
-  private programas: Programa[] = [
+  private programas = [
     {
       programa_id: 12,
       titulo: 'generico 1',
@@ -18,7 +18,7 @@ export class ProgramaService {
     },
   ];
 
-  async crearPrograma(nuevoPrograma: CrearProgramaDto): Promise<Programa> {
+  async crearPrograma(nuevoPrograma: CrearProgramaDto) {
     const programa = {
       programa_id: Math.floor(Math.random() * 2000 + 1),
       ...nuevoPrograma,
@@ -29,11 +29,11 @@ export class ProgramaService {
     return programa;
   }
 
-  async traerProgramas(): Promise<Programa[]> {
+  async traerProgramas() {
     return this.programas;
   }
 
-  async traerProgramaPorId(programaId: number): Promise<Programa> {
+  async traerProgramaPorId(programaId: number) {
     const programa = this.programas.find((p) => programaId === p.programa_id);
     return programa;
   }

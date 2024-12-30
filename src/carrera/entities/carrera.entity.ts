@@ -2,7 +2,14 @@ import { CampoDeAccion } from '@/campo-accion/entities/campo-accion.entity';
 import { carreraTypes } from '@/common/interfaces/carrera-type.interface';
 import { Competencia } from '@/competencia/entities/competencia.entitie';
 import { Cuatrimestre } from '@/cuatrimestre/entities/cuatrimestre.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Programa } from '@/programa/entities/programa.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('carreras')
 export class Carrera {
@@ -49,4 +56,7 @@ export class Carrera {
 
   @OneToMany(() => CampoDeAccion, (campo) => campo.carrera)
   camposDeAccion?: CampoDeAccion[];
+
+  @ManyToMany(() => Programa, (programa) => programa.carreras)
+  programas?: Programa[];
 }
