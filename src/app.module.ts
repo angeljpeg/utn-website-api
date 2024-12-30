@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProgramaModule } from './programa/programa.module';
 import { CarreraModule } from './carrera/carrera.module';
 import { CompetenciaModule } from './competencia/competencia.module';
+import { MateriaModule } from './materia/materia.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { CompetenciaModule } from './competencia/competencia.module';
     ProgramaModule,
     CarreraModule,
     CompetenciaModule,
+    MateriaModule,
   ],
   controllers: [],
   providers: [],
