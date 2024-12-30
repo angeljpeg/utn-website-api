@@ -4,6 +4,8 @@ import { ProgramaModule } from './programa/programa.module';
 import { CarreraModule } from './carrera/carrera.module';
 import { CompetenciaModule } from './competencia/competencia.module';
 import { MateriaModule } from './materia/materia.module';
+import { CampoAccionModule } from './campo-accion/campo-accion.module';
+import { CuatrimestreModule } from './cuatrimestre/cuatrimestre.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { MateriaModule } from './materia/materia.module';
     CarreraModule,
     CompetenciaModule,
     MateriaModule,
+    CampoAccionModule,
+    CuatrimestreModule,
   ],
   controllers: [],
   providers: [],
