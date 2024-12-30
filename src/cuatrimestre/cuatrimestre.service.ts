@@ -5,12 +5,12 @@ import { Cuatrimestre } from './entities/cuatrimestre.entity';
 
 @Injectable()
 export class CuatrimestreService {
-  private cuatrimestres: Cuatrimestre[] = [];
+  private cuatrimestres = [];
 
   constructor() {}
 
   async crearCuatrimestre(numero: CrearCuatrimestreDto) {
-    const nuevoCuatrimestre: Cuatrimestre = {
+    const nuevoCuatrimestre = {
       cuatrimestre_id: Math.floor(Math.random() * 2000),
       ...numero,
     };

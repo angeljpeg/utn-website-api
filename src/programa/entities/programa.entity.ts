@@ -1,7 +1,7 @@
 import { Carrera } from '@/carrera/entities/carrera.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('programa')
+@Entity('programas')
 export class Programa {
   @PrimaryGeneratedColumn('increment')
   programa_id: number;

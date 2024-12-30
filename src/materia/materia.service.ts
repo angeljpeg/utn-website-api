@@ -5,7 +5,7 @@ import { ActualizarMateriaDto } from './dto/update-materia.dto';
 
 @Injectable()
 export class MateriaService {
-  private materias: Materia[] = [];
+  private materias = [];
   constructor() {}
 
   crearMateria(materia: CrearMateriaDto) {
