@@ -5,6 +5,8 @@
 ## Project setup
 
 ```bash
+$ git clone https://github.com/angeljpeg/utn-website-api.git
+$ cd utn-webiste-api
 $ pnpm install
 ```
 
