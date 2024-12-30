@@ -1,6 +1,6 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Esta es la API para el website official de la Universidad Tecnologica de Nogales
 
 ## Project setup
 
