@@ -34,7 +34,7 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Stay in touch
+## Collaborators
 
 - Author - [angeljpeg](https://github.com/angeljpeg)
 - Website - [UTN](https://nestjs.com/)
