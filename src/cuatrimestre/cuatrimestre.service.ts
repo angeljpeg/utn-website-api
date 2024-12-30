@@ -5,36 +5,36 @@ import { Cuatrimestre } from './entities/cuatrimestre.entity';
 
 @Injectable()
 export class CuatrimestreService {
-  private cuatrimestres = [];
+  private cuatrimestres: Cuatrimestre[] = [];
 
   constructor() {}
 
   async crearCuatrimestre(numero: CrearCuatrimestreDto) {
-    const nuevoCuatrimestre = {
+    /*     const nuevoCuatrimestre = {
       cuatrimestre_id: Math.floor(Math.random() * 2000),
       ...numero,
     };
 
     this.cuatrimestres.push(nuevoCuatrimestre);
 
-    return nuevoCuatrimestre;
+    return nuevoCuatrimestre; */
   }
 
   async obtenerCuatrimestres() {
-    return this.cuatrimestres;
+    /*     return this.cuatrimestres; */
   }
 
   async obtenerCuatrimestrePorId(cuatrimestre_id: number) {
-    return this.cuatrimestres.find(
+    /*     return this.cuatrimestres.find(
       (c) => c.cuatrimestre_id === cuatrimestre_id,
-    );
+    ); */
   }
 
   async actualizarCuatrimestre(
     cuatrimestre_id: number,
     { numero }: ActualizarCuatrimestreDto,
   ) {
-    const competenciaEncontrada = this.cuatrimestres.find(
+    /*     const competenciaEncontrada = this.cuatrimestres.find(
       (c) => c.cuatrimestre_id === cuatrimestre_id,
     );
 
@@ -44,14 +44,14 @@ export class CuatrimestreService {
 
     competenciaEncontrada.numero = numero;
 
-    return competenciaEncontrada;
+    return competenciaEncontrada; */
   }
 
   async eliminarCuatrimestre(cuatrimestre_id: number) {
-    this.cuatrimestres = this.cuatrimestres.filter(
+    /*     this.cuatrimestres = this.cuatrimestres.filter(
       (c) => c.cuatrimestre_id !== cuatrimestre_id,
     );
 
-    return this.cuatrimestres;
+    return this.cuatrimestres; */
   }
 }

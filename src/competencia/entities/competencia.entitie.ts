@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Carrera } from '@/carrera/entities/carrera.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('competencias')
 export class Competencia {
@@ -7,4 +8,7 @@ export class Competencia {
 
   @Column({ type: 'text' })
   competencia: string;
+
+  @ManyToOne(() => Carrera, (carrera) => carrera.competencias)
+  carrera: Carrera;
 }

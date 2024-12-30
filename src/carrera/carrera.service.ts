@@ -5,32 +5,21 @@ import { Carrera } from './entities/carrera.entity';
 
 @Injectable()
 export class CarreraService {
-  private carreras: Carrera[] = [
-    {
-      carrera_id: 1,
-      titulo: 'Ingienieria en Sistemas',
-      slug: 'ing-sistemas',
-      type: 'ing',
-      area: 'Tecnologia',
-      competencias: ['Desarrollo de software', 'Gestion de proyectos'],
-      pdf: 'pdf',
-      banner: 'banner',
-    },
-  ];
+  private carreras: Carrera[] = [];
 
-  async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<Carrera> {
-    const carrera = {
+  async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<void> {
+    /*     const carrera = {
       carrera_id: Math.floor(Math.random() * 2000 + 1),
       ...nuevaCarrera,
     };
 
     this.carreras.push(carrera);
 
-    return carrera;
+    return carrera; */
   }
 
   async traerCarreras(): Promise<Carrera[]> {
-    return this.carreras;
+    return;
   }
 
   async traerCarreraPorId(carreraId: number): Promise<Carrera> {
@@ -52,11 +41,6 @@ export class CarreraService {
     if (index === -1) {
       return `No se encontró un programa con ID #${carreraId}.`;
     }
-
-    this.carreras[index] = {
-      ...this.carreras[index],
-      ...datosActualizados,
-    };
 
     return `El programa con ID #${carreraId} ha sido actualizado exitosamente.`;
   }

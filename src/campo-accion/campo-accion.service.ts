@@ -9,29 +9,29 @@ export class CampoAccionService {
   constructor() {}
 
   crearCampoDeAccion(materia: CrearCampoDeAccionDto) {
-    const nuevoCampo = {
+    /*     const nuevoCampo = {
       campo_id: Math.floor(Math.random() * 2000),
       ...materia,
     };
 
     this.camposDeAccion.push(nuevoCampo);
 
-    return nuevoCampo;
+    return nuevoCampo; */
   }
 
   async obtenerCamposDeAccion() {
-    return this.camposDeAccion;
+    /*     return this.camposDeAccion; */
   }
 
   async obtenerCampoPorId(campo_id: number) {
-    return this.camposDeAccion.find((c) => c.campo_id === campo_id);
+    /*     return this.camposDeAccion.find((c) => c.campo_id === campo_id); */
   }
 
   async actualizarCampo(
     campo_id: number,
     { descripcion }: ActualizarCampoDeAccionDto,
   ) {
-    const materiaEncontrada = this.camposDeAccion.find(
+    /*     const materiaEncontrada = this.camposDeAccion.find(
       (c) => c.campo_id === campo_id,
     );
 
@@ -41,14 +41,14 @@ export class CampoAccionService {
 
     materiaEncontrada.descripcion = descripcion;
 
-    return materiaEncontrada;
+    return materiaEncontrada; */
   }
 
   async eliminarCampo(campo_id: number) {
-    this.camposDeAccion = this.camposDeAccion.filter(
+    /*     this.camposDeAccion = this.camposDeAccion.filter(
       (c) => c.campo_id !== campo_id,
     );
 
-    return 'Campo Eliminada';
+    return 'Campo Eliminada'; */
   }
 }

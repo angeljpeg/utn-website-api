@@ -10,5 +10,5 @@ export class Materia {
   materia: string;
 
   @ManyToOne(() => Cuatrimestre, (cuatrimestre) => cuatrimestre.materias)
-  cuatrimestre: Cuatrimestre[];
+  cuatrimestre: Cuatrimestre;
 }
