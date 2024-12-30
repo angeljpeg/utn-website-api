@@ -27,6 +27,11 @@ export class CarreraService {
     return carrera;
   }
 
+  async traerCarreraPorSlug(slug: string): Promise<Carrera> {
+    const carrera = this.carreras.find((c) => slug === c.slug);
+    return carrera;
+  }
+
   async actualizarCarrera(
     carreraId: number,
     datosActualizados: UpdateCarreraDto,

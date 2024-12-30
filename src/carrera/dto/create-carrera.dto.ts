@@ -6,6 +6,9 @@ export class CreateCarreraDto {
   titulo: string;
 
   @IsString()
+  slug: string;
+
+  @IsString()
   type: typeof carreraTypes;
 
   @IsString()

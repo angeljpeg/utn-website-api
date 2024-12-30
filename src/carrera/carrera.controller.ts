@@ -30,6 +30,11 @@ export class CarreraController {
     return this.carreraService.traerCarreraPorId(+id);
   }
 
+  @Get(':slug')
+  traerCarreraPorSlug(@Param('slug') slug: string) {
+    return this.carreraService.traerCarreraPorSlug(slug);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCarreraDto: UpdateCarreraDto) {
     return this.carreraService.actualizarCarrera(+id, updateCarreraDto);
