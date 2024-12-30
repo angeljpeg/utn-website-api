@@ -36,9 +36,8 @@ $ pnpm run test:cov
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [angeljpeg](https://github.com/angeljpeg)
+- Website - [UTN](https://nestjs.com/)
 
 ## License
 
