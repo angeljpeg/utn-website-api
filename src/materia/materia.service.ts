@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Materia } from './entities/materia.entity';
 import { CrearMateriaDto } from './dto/create-materia.dto';
 import { ActualizarMateriaDto } from './dto/update-materia.dto';
@@ -8,7 +8,6 @@ import { Cuatrimestre } from '@/cuatrimestre/entities/cuatrimestre.entity';
 
 @Injectable()
 export class MateriaService {
-  private materias = [];
   constructor(
     @InjectRepository(Materia)
     private readonly MateriaRepository: Repository<Materia>,
@@ -25,35 +24,39 @@ export class MateriaService {
   }
 
   async obtenerMaterias(): Promise<[Materia[], number]> {
-    return await this.MateriaRepository.findAndCount({
-      relations: ['cuatrimestre'],
-    });
+    return await this.MateriaRepository.findAndCount();
   }
 
-  async obtenerMateriaPorId(materia_id: number) {
-    return this.materias.find((m) => m.materia_id === materia_id);
+  async obtenerMateriaPorId(materia_id: number): Promise<Materia> {
+    const materia = await this.MateriaRepository.findOne({
+      where: { materia_id },
+    });
+
+    if (!materia) {
+      throw new NotFoundException();
+    }
+
+    return materia;
   }
 
   async actualizarMateria(
     materia_id: number,
-    { materia }: ActualizarMateriaDto,
-  ) {
-    const materiaEncontrada = this.materias.find(
-      (m) => m.materia_id === materia_id,
-    );
+    datosActualizados: ActualizarMateriaDto,
+  ): Promise<Materia> {
+    await this.obtenerMateriaPorId(materia_id);
 
-    if (!materiaEncontrada) {
-      return null;
-    }
+    await this.MateriaRepository.update(materia_id, datosActualizados);
 
-    materiaEncontrada.materia = materia;
+    const materia = await this.obtenerMateriaPorId(materia_id);
 
-    return materiaEncontrada;
+    return materia;
   }
 
-  async eliminarMateria(materia_id: number) {
-    this.materias = this.materias.filter((m) => m.materia_id !== materia_id);
+  async eliminarMateria(materia_id: number): Promise<{ message: string }> {
+    const materia = await this.obtenerMateriaPorId(materia_id);
 
-    return 'Materia Eliminada';
+    await this.MateriaRepository.remove(materia);
+
+    return { message: `Materia #${materia_id} ha sido elimindada` };
   }
 }

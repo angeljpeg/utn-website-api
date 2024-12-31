@@ -15,6 +15,9 @@ export class Materia {
   @Column({ type: 'text' })
   materia: string;
 
+  @Column({ type: 'int' })
+  cuatrimestre_id: number;
+
   @ManyToOne(() => Cuatrimestre, (cuatrimestre) => cuatrimestre.materias)
   @JoinColumn({ name: 'cuatrimestre_id' })
   cuatrimestre: Cuatrimestre;
