@@ -39,4 +39,4 @@ $ pnpm run test:cov
 ## Collaborators
 
 - Author - [angeljpeg](https://github.com/angeljpeg)
-- Website - [UTN]([https://nestjs.com/](http://www.utnogales.edu.mx/newmodel2024.html)
+- Website - [UTN]([http://www.utnogales.edu.mx/index.html])
