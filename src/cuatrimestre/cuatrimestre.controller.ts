@@ -15,33 +15,33 @@ import { ActualizarCuatrimestreDto } from './dto/update-cuatrimestre.dto';
 export class CuatrimestreController {
   constructor(private readonly cuatrimestreService: CuatrimestreService) {}
   @Get()
-  async obtenerCompetencias() {
-    return this.cuatrimestreService.obtenerCuatrimestres();
+  async obtenerCuatrimestres() {
+    return await this.cuatrimestreService.obtenerCuatrimestres();
   }
 
   @Post()
-  create(@Body() nuevaCompetencia: CrearCuatrimestreDto) {
-    return this.cuatrimestreService.crearCuatrimestre(nuevaCompetencia);
+  async crearCuatrimestre(@Body() nuevoCuatrimestre: CrearCuatrimestreDto) {
+    return await this.cuatrimestreService.crearCuatrimestre(nuevoCuatrimestre);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cuatrimestreService.obtenerCuatrimestrePorId(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.cuatrimestreService.obtenerCuatrimestrePorId(+id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() nuevaCompetencia: ActualizarCuatrimestreDto,
   ) {
-    return this.cuatrimestreService.actualizarCuatrimestre(
+    return await this.cuatrimestreService.actualizarCuatrimestre(
       +id,
       nuevaCompetencia,
     );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cuatrimestreService.eliminarCuatrimestre(+id);
+  async remove(@Param('id') id: string) {
+    return await this.cuatrimestreService.eliminarCuatrimestre(+id);
   }
 }

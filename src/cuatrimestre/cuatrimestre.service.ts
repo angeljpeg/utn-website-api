@@ -1,57 +1,68 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CrearCuatrimestreDto } from './dto/create-cuatrimestre.dto';
 import { ActualizarCuatrimestreDto } from './dto/update-cuatrimestre.dto';
 import { Cuatrimestre } from './entities/cuatrimestre.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Materia } from '@/materia/entities/materia.entity';
 
 @Injectable()
 export class CuatrimestreService {
-  private cuatrimestres: Cuatrimestre[] = [];
+  constructor(
+    @InjectRepository(Cuatrimestre)
+    private readonly cuatriRepo: Repository<Cuatrimestre>,
+    @InjectRepository(Materia)
+    private readonly materiaRepo: Repository<Materia>,
+  ) {}
 
-  constructor() {}
+  async crearCuatrimestre(cuatrimestre: CrearCuatrimestreDto) {
+    const nuevoCuatrimestre = await this.cuatriRepo.create(cuatrimestre);
 
-  async crearCuatrimestre(numero: CrearCuatrimestreDto) {
-    /*     const nuevoCuatrimestre = {
-      cuatrimestre_id: Math.floor(Math.random() * 2000),
-      ...numero,
-    };
+    await this.cuatriRepo.save(nuevoCuatrimestre);
 
-    this.cuatrimestres.push(nuevoCuatrimestre);
-
-    return nuevoCuatrimestre; */
+    return nuevoCuatrimestre;
   }
 
   async obtenerCuatrimestres() {
-    /*     return this.cuatrimestres; */
+    return await this.cuatriRepo.findAndCount({ relations: ['materias'] });
   }
 
   async obtenerCuatrimestrePorId(cuatrimestre_id: number) {
-    /*     return this.cuatrimestres.find(
-      (c) => c.cuatrimestre_id === cuatrimestre_id,
-    ); */
+    const cuatrimestre = await this.cuatriRepo.findOne({
+      relations: ['materias'],
+      where: { cuatrimestre_id },
+    });
+
+    if (!cuatrimestre) {
+      throw new NotFoundException();
+    }
+
+    return cuatrimestre;
   }
 
   async actualizarCuatrimestre(
     cuatrimestre_id: number,
-    { numero }: ActualizarCuatrimestreDto,
+    nuevosDatos: ActualizarCuatrimestreDto,
   ) {
-    /*     const competenciaEncontrada = this.cuatrimestres.find(
-      (c) => c.cuatrimestre_id === cuatrimestre_id,
-    );
+    const cuatrimestreEncontrado =
+      await this.obtenerCuatrimestrePorId(cuatrimestre_id);
 
-    if (!competenciaEncontrada) {
+    if (!cuatrimestreEncontrado) {
       return null;
     }
 
-    competenciaEncontrada.numero = numero;
+    await this.cuatriRepo.update(cuatrimestre_id, nuevosDatos);
 
-    return competenciaEncontrada; */
+    const cuatrimestre = await this.obtenerCuatrimestrePorId(cuatrimestre_id);
+
+    return cuatrimestre;
   }
 
   async eliminarCuatrimestre(cuatrimestre_id: number) {
-    /*     this.cuatrimestres = this.cuatrimestres.filter(
-      (c) => c.cuatrimestre_id !== cuatrimestre_id,
-    );
+    const cuatrimestre = await this.obtenerCuatrimestrePorId(cuatrimestre_id);
 
-    return this.cuatrimestres; */
+    await this.cuatriRepo.remove(cuatrimestre);
+
+    return { message: `Cuatrimestre #${cuatrimestre_id} ha sido eliminado` };
   }
 }

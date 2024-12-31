@@ -9,12 +9,15 @@ import { Carrera } from './entities/carrera.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrearIngieneriaDto } from './dto/create-ingieneria.dto';
+import { Cuatrimestre } from '@/cuatrimestre/entities/cuatrimestre.entity';
 
 @Injectable()
 export class CarreraService {
   constructor(
     @InjectRepository(Carrera)
     private readonly carreraRepo: Repository<Carrera>,
+    @InjectRepository(Cuatrimestre)
+    private readonly cuatriRepo: Repository<Cuatrimestre>,
   ) {}
 
   async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<Carrera> {
@@ -34,7 +37,9 @@ export class CarreraService {
   }
 
   async traerCarreras(): Promise<[Carrera[], number]> {
-    return this.carreraRepo.findAndCount({ relations: ['carreraIng'] });
+    return this.carreraRepo.findAndCount({
+      relations: ['carreraIng', 'cuatrimestres'],
+    });
   }
 
   async traerCarreraPorId(carreraId: number): Promise<Carrera> {

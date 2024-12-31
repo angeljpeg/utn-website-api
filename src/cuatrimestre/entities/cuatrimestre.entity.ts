@@ -3,6 +3,7 @@ import { Materia } from '@/materia/entities/materia.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,6 +20,10 @@ export class Cuatrimestre {
   @OneToMany(() => Materia, (materia) => materia.cuatrimestre)
   materias: Materia[];
 
+  @Column({ type: 'int' })
+  carrera_id: number;
+
   @ManyToOne(() => Carrera, (carrera) => carrera.cuatrimestres)
+  @JoinColumn({ name: 'carrera_id' })
   carrera: Carrera;
 }
