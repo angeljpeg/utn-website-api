@@ -1,5 +1,11 @@
 import { Cuatrimestre } from '@/cuatrimestre/entities/cuatrimestre.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('materias')
 export class Materia {
@@ -10,5 +16,6 @@ export class Materia {
   materia: string;
 
   @ManyToOne(() => Cuatrimestre, (cuatrimestre) => cuatrimestre.materias)
+  @JoinColumn({ name: 'cuatrimestre_id' })
   cuatrimestre: Cuatrimestre;
 }

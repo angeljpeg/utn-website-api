@@ -1,73 +1,65 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CrearProgramaDto } from './dto/create-programa.dto';
 import { ActualizarProgramaDto } from './dto/update-programa.dto';
 import { Programa } from './entities/programa.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Carrera } from '@/carrera/entities/carrera.entity';
 
 @Injectable()
 export class ProgramaService {
-  private programas = [
-    {
-      programa_id: 12,
-      titulo: 'generico 1',
-      icon: 'generico 1',
-    },
-    {
-      programa_id: 24,
-      titulo: 'generico 2',
-      icon: 'generico 2',
-    },
-  ];
+  constructor(
+    @InjectRepository(Programa)
+    private readonly ProgramaRepo: Repository<Programa>,
+    @InjectRepository(Carrera)
+    private readonly CarreraRepo: Repository<Carrera>,
+  ) {}
 
-  async crearPrograma(nuevoPrograma: CrearProgramaDto) {
-    const programa = {
-      programa_id: Math.floor(Math.random() * 2000 + 1),
-      ...nuevoPrograma,
-    };
+  async crearPrograma(programa: CrearProgramaDto): Promise<Programa> {
+    const nuevoPrograma = await this.ProgramaRepo.create(programa);
 
-    this.programas.push(programa);
+    await this.ProgramaRepo.save(nuevoPrograma);
 
-    return programa;
+    return nuevoPrograma;
   }
 
-  async traerProgramas() {
-    return this.programas;
+  async traerProgramas(): Promise<[Programa[], number]> {
+    return await this.ProgramaRepo.findAndCount({ relations: ['carreras'] });
   }
 
-  async traerProgramaPorId(programaId: number) {
-    const programa = this.programas.find((p) => programaId === p.programa_id);
+  async traerProgramaPorId(programa_id: number) {
+    const programa = await this.ProgramaRepo.findOne({
+      where: { programa_id },
+    });
+    if (!programa) {
+      throw new NotFoundException(
+        `El programa con ID #${programa_id} no existe.`,
+      );
+    }
+
     return programa;
   }
 
   async actualizarProgramaPorId(
-    programaId: number,
+    programa_id: number,
     datosActualizados: ActualizarProgramaDto,
-  ): Promise<string> {
-    const index = this.programas.findIndex(
-      (programa) => programa.programa_id === programaId,
-    );
+  ): Promise<Programa> {
+    await this.traerProgramaPorId(programa_id);
 
-    if (index === -1) {
-      return `No se encontró un programa con ID #${programaId}.`;
-    }
+    await this.ProgramaRepo.update(programa_id, datosActualizados);
 
-    this.programas[index] = {
-      ...this.programas[index],
-      ...datosActualizados,
-    };
+    const programa = await this.traerProgramaPorId(programa_id);
 
-    return `El programa con ID #${programaId} ha sido actualizado exitosamente.`;
+    return programa;
   }
 
-  async eliminarProgramaPorId(programaId: number): Promise<string> {
-    const index = this.programas.findIndex(
-      (programa) => programa.programa_id === programaId,
-    );
+  async eliminarProgramaPorId(
+    programa_id: number,
+  ): Promise<{ message: string }> {
+    await this.traerProgramaPorId(programa_id);
 
-    if (index === -1) {
-      return `No se encontró un programa con ID #${programaId}.`;
-    }
+    await this.ProgramaRepo.delete(programa_id);
 
-    this.programas.splice(index, 1);
-    return `El programa con ID #${programaId} ha sido eliminado exitosamente.`;
+    return { message: `El programa con ID #${programa_id} ha sido eliminado.` };
   }
 }

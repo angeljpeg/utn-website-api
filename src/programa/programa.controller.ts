@@ -26,8 +26,8 @@ export class ProgramaController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.programaService.traerProgramaPorId(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.programaService.traerProgramaPorId(+id);
   }
 
   @Patch(':id')

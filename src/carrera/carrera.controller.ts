@@ -10,6 +10,7 @@ import {
 import { CarreraService } from './carrera.service';
 import { CreateCarreraDto } from './dto/create-carrera.dto';
 import { UpdateCarreraDto } from './dto/update-carrera.dto';
+import { CrearIngieneriaDto } from './dto/create-ingieneria.dto';
 
 @Controller('carrera')
 export class CarreraController {
@@ -18,6 +19,11 @@ export class CarreraController {
   @Post()
   create(@Body() createCarreraDto: CreateCarreraDto) {
     return this.carreraService.crearCarrera(createCarreraDto);
+  }
+
+  @Post('ing')
+  crearIngieneria(@Body() nuevaIngieneria: CrearIngieneriaDto) {
+    return this.carreraService.crearIngieneria(nuevaIngieneria);
   }
 
   @Get()

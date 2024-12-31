@@ -1,5 +1,5 @@
 import { carreraTypes } from '@/common/interfaces/carrera-type.interface';
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCarreraDto {
   @IsString()
@@ -15,14 +15,18 @@ export class CreateCarreraDto {
   @IsOptional()
   area?: string;
 
-  @IsArray()
+  @IsString()
   @IsOptional()
-  competencias?: string[];
+  pdf: string;
 
   @IsString()
   @IsOptional()
-  pdf?: string;
-
-  @IsString()
   banner?: string;
+
+  @IsString()
+  @IsOptional()
+  img_competencias?: string;
+
+  @IsNumber()
+  programa_id: number;
 }

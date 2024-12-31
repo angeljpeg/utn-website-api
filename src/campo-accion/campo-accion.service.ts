@@ -2,11 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CampoDeAccion } from './entities/campo-accion.entity';
 import { CrearCampoDeAccionDto } from './dto/create-campo-accion.dto';
 import { ActualizarCampoDeAccionDto } from './dto/update-campo-accion.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CampoAccionService {
   private camposDeAccion: CampoDeAccion[] = [];
-  constructor() {}
+  constructor(
+    @InjectRepository(CampoDeAccion)
+    private readonly CampoRepository: Repository<CampoDeAccion>,
+  ) {}
 
   crearCampoDeAccion(materia: CrearCampoDeAccionDto) {
     /*     const nuevoCampo = {
@@ -19,9 +24,7 @@ export class CampoAccionService {
     return nuevoCampo; */
   }
 
-  async obtenerCamposDeAccion() {
-    /*     return this.camposDeAccion; */
-  }
+  async obtenerCamposDeAccion() {}
 
   async obtenerCampoPorId(campo_id: number) {
     /*     return this.camposDeAccion.find((c) => c.campo_id === campo_id); */

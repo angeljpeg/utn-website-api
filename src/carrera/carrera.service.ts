@@ -1,58 +1,84 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCarreraDto } from './dto/create-carrera.dto';
 import { UpdateCarreraDto } from './dto/update-carrera.dto';
 import { Carrera } from './entities/carrera.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CrearIngieneriaDto } from './dto/create-ingieneria.dto';
 
 @Injectable()
 export class CarreraService {
-  private carreras: Carrera[] = [];
+  constructor(
+    @InjectRepository(Carrera)
+    private readonly carreraRepo: Repository<Carrera>,
+  ) {}
 
-  async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<void> {
-    /*     const carrera = {
-      carrera_id: Math.floor(Math.random() * 2000 + 1),
-      ...nuevaCarrera,
-    };
+  async crearCarrera(nuevaCarrera: CreateCarreraDto): Promise<Carrera> {
+    const carreraExistente = await this.traerCarreraPorSlug(nuevaCarrera.slug);
 
-    this.carreras.push(carrera);
+    if (carreraExistente) {
+      throw new BadRequestException('Ya existe una carrera con este slug.');
+    }
 
-    return carrera; */
+    const carrera = this.carreraRepo.create(nuevaCarrera);
+    return this.carreraRepo.save(carrera);
   }
 
-  async traerCarreras(): Promise<Carrera[]> {
-    return;
+  async crearIngieneria(nuevaIngenieria: CrearIngieneriaDto): Promise<Carrera> {
+    const carrera = this.carreraRepo.create(nuevaIngenieria);
+    return this.carreraRepo.save(carrera);
+  }
+
+  async traerCarreras(): Promise<[Carrera[], number]> {
+    return this.carreraRepo.findAndCount({ relations: ['carreraIng'] });
   }
 
   async traerCarreraPorId(carreraId: number): Promise<Carrera> {
-    const carrera = this.carreras.find((c) => carreraId === c.carrera_id);
+    const carrera = await this.carreraRepo.findOne({
+      where: { carrera_id: carreraId },
+    });
+
+    if (!carrera) {
+      throw new NotFoundException(
+        `No se encontró una carrera con ID #${carreraId}.`,
+      );
+    }
+
     return carrera;
   }
 
-  async traerCarreraPorSlug(slug: string): Promise<Carrera> {
-    const carrera = this.carreras.find((c) => slug === c.slug);
+  async traerCarreraPorSlug(slug: string): Promise<Carrera | null> {
+    const carrera = await this.carreraRepo.findOne({ where: { slug } });
+
+    if (!carrera) {
+      throw new NotFoundException(
+        `No se encontró una carrera con slug ${slug}.`,
+      );
+    }
+
     return carrera;
   }
 
   async actualizarCarrera(
     carreraId: number,
     datosActualizados: UpdateCarreraDto,
-  ): Promise<string> {
-    const index = this.carreras.findIndex((c) => c.carrera_id === carreraId);
+  ): Promise<Carrera> {
+    const carrera = await this.traerCarreraPorId(carreraId);
 
-    if (index === -1) {
-      return `No se encontró un programa con ID #${carreraId}.`;
-    }
-
-    return `El programa con ID #${carreraId} ha sido actualizado exitosamente.`;
+    Object.assign(carrera, datosActualizados);
+    return this.carreraRepo.save(carrera);
   }
 
-  async eliminarCarrera(carreraId: number): Promise<string> {
-    const index = this.carreras.findIndex((c) => c.carrera_id === carreraId);
+  async eliminarCarrera(carreraId: number): Promise<{ message: string }> {
+    const carrera = await this.traerCarreraPorId(carreraId);
 
-    if (index === -1) {
-      return `No se encontró un programa con ID #${carreraId}.`;
-    }
-
-    this.carreras.splice(index, 1);
-    return `El programa con ID #${carreraId} ha sido eliminado exitosamente.`;
+    await this.carreraRepo.remove(carrera);
+    return {
+      message: `La carrera con ID #${carreraId} ha sido eliminada exitosamente.`,
+    };
   }
 }
