@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CampoDeAccion } from './entities/campo-accion.entity';
 import { CrearCampoDeAccionDto } from './dto/create-campo-accion.dto';
 import { ActualizarCampoDeAccionDto } from './dto/update-campo-accion.dto';
@@ -13,45 +13,43 @@ export class CampoAccionService {
     private readonly CampoRepository: Repository<CampoDeAccion>,
   ) {}
 
-  crearCampoDeAccion(materia: CrearCampoDeAccionDto) {
-    /*     const nuevoCampo = {
-      campo_id: Math.floor(Math.random() * 2000),
-      ...materia,
-    };
+  async crearCampoDeAccion(campo: CrearCampoDeAccionDto) {
+    const nuevoCampo = await this.CampoRepository.create(campo);
 
-    this.camposDeAccion.push(nuevoCampo);
+    await this.CampoRepository.save(nuevoCampo);
 
-    return nuevoCampo; */
+    return nuevoCampo;
   }
 
-  async obtenerCamposDeAccion() {}
+  async obtenerCamposDeAccion() {
+    return await this.CampoRepository.findAndCount();
+  }
 
   async obtenerCampoPorId(campo_id: number) {
-    /*     return this.camposDeAccion.find((c) => c.campo_id === campo_id); */
-  }
+    const campo = await this.CampoRepository.findOne({ where: { campo_id } });
 
-  async actualizarCampo(
-    campo_id: number,
-    { descripcion }: ActualizarCampoDeAccionDto,
-  ) {
-    /*     const materiaEncontrada = this.camposDeAccion.find(
-      (c) => c.campo_id === campo_id,
-    );
-
-    if (!materiaEncontrada) {
-      return null;
+    if (!campo) {
+      throw new NotFoundException();
     }
 
-    materiaEncontrada.descripcion = descripcion;
+    return campo;
+  }
 
-    return materiaEncontrada; */
+  async actualizarCampo(campo_id: number, datos: ActualizarCampoDeAccionDto) {
+    await this.obtenerCampoPorId(campo_id);
+
+    await this.CampoRepository.update(campo_id, datos);
+
+    const campo = this.obtenerCampoPorId(campo_id);
+
+    return campo;
   }
 
   async eliminarCampo(campo_id: number) {
-    /*     this.camposDeAccion = this.camposDeAccion.filter(
-      (c) => c.campo_id !== campo_id,
-    );
+    const campo = await this.obtenerCampoPorId(campo_id);
 
-    return 'Campo Eliminada'; */
+    await this.CampoRepository.remove(campo);
+
+    return { message: `Campo de Accion #${campo_id} ha sido eliminado` };
   }
 }

@@ -1,5 +1,11 @@
 import { Carrera } from '@/carrera/entities/carrera.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('campos_de_accion')
 export class CampoDeAccion {
@@ -9,6 +15,10 @@ export class CampoDeAccion {
   @Column({ type: 'text' })
   descripcion: string;
 
+  @Column({ type: 'int' })
+  carrera_id: number;
+
   @ManyToOne(() => Carrera, (carrera) => carrera.camposDeAccion)
+  @JoinColumn({ name: 'carrera_id' })
   carrera: Carrera;
 }

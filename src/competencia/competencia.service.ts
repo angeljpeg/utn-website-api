@@ -1,54 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CrearCompetenciaDto } from './dto/create-competencia.dto';
 import { ActualizarCompetenciaDto } from './dto/update-competencia.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Competencia } from './entities/competencia.entitie';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CompetenciaService {
-  private competencias = [];
+  constructor(
+    @InjectRepository(Competencia)
+    private readonly competenciasRepo: Repository<Competencia>,
+  ) {}
 
-  constructor() {}
+  async crearCompetencias(datos: CrearCompetenciaDto) {
+    const competencia = await this.competenciasRepo.create(datos);
 
-  async crearCompetencias(competencia: CrearCompetenciaDto) {
-    const nuevaCompetencia = {
-      competencia_id: Math.floor(Math.random() * 2000),
-      ...competencia,
-    };
+    await this.competenciasRepo.save(competencia);
 
-    this.competencias.push(nuevaCompetencia);
-
-    return nuevaCompetencia;
+    return competencia;
   }
 
   async obtenerCompetencias() {
-    return this.competencias;
+    return await this.competenciasRepo.findAndCount();
   }
 
   async obtenerCompetenciaPorId(competencia_id: number) {
-    return this.competencias.find((c) => c.competencia_id === competencia_id);
+    const competencia = await this.competenciasRepo.findOne({
+      where: { competencia_id },
+    });
+
+    if (!competencia) {
+      throw new NotFoundException();
+    }
+
+    return competencia;
   }
 
   async actualizarCompetencia(
     competencia_id: number,
-    { competencia }: ActualizarCompetenciaDto,
+    datos: ActualizarCompetenciaDto,
   ) {
-    const competenciaEncontrada = this.competencias.find(
-      (c) => c.competencia_id === competencia_id,
-    );
+    await this.obtenerCompetenciaPorId(competencia_id);
 
-    if (!competenciaEncontrada) {
-      return null;
-    }
+    await this.competenciasRepo.update(competencia_id, datos);
 
-    competenciaEncontrada.competencia = competencia;
+    const competencia = await this.obtenerCompetenciaPorId(competencia_id);
 
-    return competenciaEncontrada;
+    return competencia;
   }
 
   async eliminarCompetencia(competencia_id: number) {
-    this.competencias = this.competencias.filter(
-      (c) => c.competencia_id !== competencia_id,
-    );
+    const competencia = await this.obtenerCompetenciaPorId(competencia_id);
 
-    return this.competencias;
+    await this.competenciasRepo.remove(competencia);
+
+    return { message: `Competencia #${competencia_id} ha sido eliminada` };
   }
 }
